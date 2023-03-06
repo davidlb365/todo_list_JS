@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Todo list with a list of tasks that the user wishes to complete">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Todo List</title>
+</head>
+<body>
+    <header class="header">
+        <h1 class="header__title">Todo List</h1>
+    </header>
+    <main class="main">
+        <form class="form" id="form">
+            <input type="text" placeholder="type a task" class="form__input form__input--text" id="form-input-text">
+            <div class="form__row" id="form-row">
+                <div class="form__color form__color--red form__color--active" id="form-color-red">
+                    <input type="radio" id="red" name="fav_color" value="red" checked>
+                    <label for="red"></label>
+                </div>
+                <div class="form__color form__color--orange" id="form-color-orange" data-color="orange">
+                    <input type="radio" id="orange" name="fav_color" value="orange">
+                    <label for="orange"></label>
+                </div>
+                <div class="form__color form__color--green" id="form-color-green" data-color="green">
+                    <input type="radio" id="green" name="fav_color" value="green">
+                    <label for="green"></label>
+                </div>
+                <input type="datetime-local" class="form__input form__input--date" id="form-input-date">
+            </div>
+            <button type="submit" class="form__input form__input--submit">
+                <img src="assets/images/pencil.svg" alt="" class="form__input--icon">
+            </button>
+        </form>
+        <div class="list__error" id="list-error"></div>
+        <section class="list" id="list"></section>
+        <script src="js/scripts.js"></script>
+    </main>
+</body>
+</html>
