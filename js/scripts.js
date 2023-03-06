@@ -136,8 +136,9 @@ const createTask = obj => {
     taskDeleteImg.src = '../assets/images/close.svg'
 
     taskDelete.onclick = () => {
-        const arrayTaskMod = arrayTask.filter(task => task.id !== obj.id)
-        localStorage.setItem('todo_list', JSON.stringify(arrayTaskMod))
+        console.log(arrayTask)
+        arrayTask = arrayTask.filter(task => task.id !== obj.id)
+        localStorage.setItem('todo_list', JSON.stringify(arrayTask))
         a.remove()
     }
 
