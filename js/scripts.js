@@ -121,25 +121,27 @@ const createTask = (obj, df) => {
     const taskS = document.createElement('p')
     taskS.textContent = 'S'
     let time = msToDate(obj.ms)
+    const bool = (time.days <= 0 && time.hours <= 0 && time.minutes <= 0 && time.seconds <= 0)
     taskDays.textContent = time.days
     taskHours.textContent = time.hours
     taskMinutes.textContent = time.minutes
     taskSeconds.textContent = time.seconds
 
-    const myInterval = setInterval(() => {
+    const idInterval = setInterval(() => {
+        if(bool) clearInterval(idInterval)
         time = msToDate(obj.ms)
         taskDays.textContent = time.days
         taskHours.textContent = time.hours
         taskMinutes.textContent = time.minutes
         taskSeconds.textContent = time.seconds
     } , 1000)
-
     taskDelete = document.createElement('button')
     taskDelete.classList.add('task__delete')
     taskDeleteImg = document.createElement('img')
     taskDeleteImg.src = '../assets/images/close.svg'
 
     taskDelete.onclick = () => {
+        clearInterval(idInterval)
         arrayTask = arrayTask.filter(task => task.id !== obj.id)
         localStorage.setItem('todo_list', JSON.stringify(arrayTask))
         a.remove()
@@ -154,5 +156,4 @@ const createTask = (obj, df) => {
     a.append(h3, taskRight)
     df.appendChild(a)
     return df
-    // list.appendChild(a)
 }
