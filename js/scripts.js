@@ -1,7 +1,7 @@
 const form = document.getElementById('form')
 const formInputText = document.getElementById('form-input-text')
 const formInputDate = document.getElementById('form-input-date')
-const formRadio = document.querySelectorAll('.form__color > input[type="radio"]')
+const formRadio = document.querySelectorAll('.form__radio')
 const listError = document.getElementById('list-error')
 const list = document.getElementById('list')
 
@@ -36,7 +36,8 @@ const handleSubmit = e => {
     const obj = {
         id: Date.now(),
         title: formInputText.value,
-        ms: ms
+        ms: ms,
+        completed: false
     }
     for(let i = 0; i < formRadio.length; i++) {
         if(formRadio[i].checked) {
@@ -49,7 +50,6 @@ const handleSubmit = e => {
     const df = document.createDocumentFragment()
     const fragment = createTask(obj, df)
     list.appendChild(df)
-    // createTask(obj, df)
 }
 
 form.addEventListener("submit", handleSubmit)
@@ -88,12 +88,22 @@ const msToDate = ms => {
 }
 
 const createTask = (obj, df) => {
+    let idInterval
     const a = document.createElement('article')
-    a.classList.add('task')
-    a.style.backgroundColor = obj.color
+    a.classList.add('task', `task--${obj.color}`)
+
+    const taskLeft = document.createElement('div')
+    taskLeft.classList.add('task__left')
+    const checkbox = document.createElement('input')
+    checkbox.type = 'checkbox'
+    checkbox.checked = obj.completed ? true : false
     const h3 = document.createElement('h3')
     h3.classList.add('task__title')
-    h3.textContent = obj.title
+    if(checkbox.checked) {
+        h3.classList.add('task__title--crossed')
+        a.classList.add('task--opacity')
+    }
+
     const taskRight = document.createElement('div')
     taskRight.classList.add('task__right')
 
@@ -127,14 +137,34 @@ const createTask = (obj, df) => {
     taskMinutes.textContent = time.minutes
     taskSeconds.textContent = time.seconds
 
-    const idInterval = setInterval(() => {
-        if(bool) clearInterval(idInterval)
+    function intervalJob() {
+        if(bool || obj.completed) clearInterval(idInterval)
         time = msToDate(obj.ms)
         taskDays.textContent = time.days
         taskHours.textContent = time.hours
         taskMinutes.textContent = time.minutes
         taskSeconds.textContent = time.seconds
-    } , 1000)
+    }
+
+    idInterval = setInterval(intervalJob, 1000)
+    checkbox.onclick = () => {
+        if(checkbox.checked) {
+            obj.completed = true
+            h3.classList.add('task__title--crossed')
+            a.classList.add('task--opacity')
+            completedLS(obj)
+        }
+        else {
+            obj.completed = false
+            h3.classList.remove('task__title--crossed')
+            a.classList.remove('task--opacity')
+            idInterval = setInterval(intervalJob, 1000)
+            completedLS(obj)
+        }
+    }
+    h3.textContent = obj.title
+    taskLeft.append(checkbox, h3)
+
     taskDelete = document.createElement('button')
     taskDelete.classList.add('task__delete')
     taskDeleteImg = document.createElement('img')
@@ -153,7 +183,12 @@ const createTask = (obj, df) => {
     taskTimeMinutes.append(taskMinutes, taskM)
     taskTimeSeconds.append(taskSeconds, taskS)
     taskRight.append(taskTimeDays, taskTimeHours, taskTimeMinutes, taskTimeSeconds, taskDelete)
-    a.append(h3, taskRight)
+    a.append(taskLeft, taskRight)
     df.appendChild(a)
     return df
+}
+
+const completedLS = obj => {
+    const completedLS = arrayTask.map(task => (task.id === obj.id) ? obj : task)
+    localStorage.setItem('todo_list', JSON.stringify(completedLS))
 }
