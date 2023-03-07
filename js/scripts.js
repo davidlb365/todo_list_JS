@@ -89,8 +89,8 @@ const msToDate = ms => {
 
 const createTask = (obj, df) => {
     let idInterval
-    const a = document.createElement('article')
-    a.classList.add('task', `task--${obj.color}`)
+    const task = document.createElement('article')
+    task.classList.add('task', `task--${obj.color}`)
 
     const taskLeft = document.createElement('div')
     taskLeft.classList.add('task__left')
@@ -101,7 +101,7 @@ const createTask = (obj, df) => {
     h3.classList.add('task__title')
     if(checkbox.checked) {
         h3.classList.add('task__title--crossed')
-        a.classList.add('task--opacity')
+        task.classList.add('task--opacity')
     }
 
     const taskRight = document.createElement('div')
@@ -151,13 +151,13 @@ const createTask = (obj, df) => {
         if(checkbox.checked) {
             obj.completed = true
             h3.classList.add('task__title--crossed')
-            a.classList.add('task--opacity')
+            task.classList.add('task--opacity')
             completedLS(obj)
         }
         else {
             obj.completed = false
             h3.classList.remove('task__title--crossed')
-            a.classList.remove('task--opacity')
+            task.classList.remove('task--opacity')
             idInterval = setInterval(intervalJob, 1000)
             completedLS(obj)
         }
@@ -174,7 +174,7 @@ const createTask = (obj, df) => {
         clearInterval(idInterval)
         arrayTask = arrayTask.filter(task => task.id !== obj.id)
         localStorage.setItem('todo_list', JSON.stringify(arrayTask))
-        a.remove()
+        task.remove()
     }
 
     taskDelete.appendChild(taskDeleteImg)
@@ -183,8 +183,8 @@ const createTask = (obj, df) => {
     taskTimeMinutes.append(taskMinutes, taskM)
     taskTimeSeconds.append(taskSeconds, taskS)
     taskRight.append(taskTimeDays, taskTimeHours, taskTimeMinutes, taskTimeSeconds, taskDelete)
-    a.append(taskLeft, taskRight)
-    df.appendChild(a)
+    task.append(taskLeft, taskRight)
+    df.appendChild(task)
     return df
 }
 
