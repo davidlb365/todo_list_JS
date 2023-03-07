@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const handleSubmit = e => {
     e.preventDefault();
-    while(listError.firstChild) listError.removeChild(listError.firstChild)
+    listError.textContent = ''
     if(formInputText.value.length === 0) {
         errorMsg('Nombre de tarea obligatorio')
         return
