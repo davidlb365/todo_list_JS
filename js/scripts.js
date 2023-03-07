@@ -8,9 +8,11 @@ const list = document.getElementById('list')
 let arrayTask = JSON.parse(localStorage.getItem('todo_list')) ?? []
 
 document.addEventListener("DOMContentLoaded", () => {
+    let df = document.createDocumentFragment()
     arrayTask.forEach(element => {
-        createTask(element)
+        df = createTask(element, df)
     });
+    list.appendChild(df)
 })
 
 const handleSubmit = e => {
@@ -44,8 +46,10 @@ const handleSubmit = e => {
     }
     arrayTask = [...arrayTask, obj]
     localStorage.setItem('todo_list', JSON.stringify(arrayTask))
-    console.log(arrayTask)
-    createTask(obj)
+    const df = document.createDocumentFragment()
+    const fragment = createTask(obj, df)
+    list.appendChild(df)
+    // createTask(obj, df)
 }
 
 form.addEventListener("submit", handleSubmit)
@@ -83,7 +87,7 @@ const msToDate = ms => {
     }
 }
 
-const createTask = obj => {
+const createTask = (obj, df) => {
     const a = document.createElement('article')
     a.classList.add('task')
     a.style.backgroundColor = obj.color
@@ -136,7 +140,6 @@ const createTask = obj => {
     taskDeleteImg.src = '../assets/images/close.svg'
 
     taskDelete.onclick = () => {
-        console.log(arrayTask)
         arrayTask = arrayTask.filter(task => task.id !== obj.id)
         localStorage.setItem('todo_list', JSON.stringify(arrayTask))
         a.remove()
@@ -149,5 +152,7 @@ const createTask = obj => {
     taskTimeSeconds.append(taskSeconds, taskS)
     taskRight.append(taskTimeDays, taskTimeHours, taskTimeMinutes, taskTimeSeconds, taskDelete)
     a.append(h3, taskRight)
-    list.appendChild(a)
+    df.appendChild(a)
+    return df
+    // list.appendChild(a)
 }
